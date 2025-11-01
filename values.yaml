@@ -1,0 +1,36 @@
+replicaCount: 5
+
+image:
+  repository: dahl8dh/django-polls
+  tag: latest
+  pullPolicy: Always
+
+service:
+  hosts:
+    - django-polls.local
+    - localhost
+
+database:
+  usePostgres: false
+
+  postgresSettings:
+    port: 5432
+    username: dahl
+    password: "12345678"
+
+postgresdb:
+  enabled: false
+
+  primary:
+    image:
+      repository: docker.io/bitnami/postgresql
+      tag: "18-debian-11"
+
+  auth:
+    database: django-polls
+    username: dahl
+    password: "12345678"
+
+  persistence:
+    enabled: true
+    size: 5Gi

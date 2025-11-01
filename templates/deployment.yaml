@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: django
+  template:
+    metadata:
+      labels:
+        app: django
+    spec:
+      containers:
+        - name: django-container
+          image: {{ .Values.image.repository}}:{{ .Values.image.tag }}
+          imagePullPolicy: {{ .Values.image.pullPolicy}}
+          securityContext:
+            runAsUser: 0
+            runAsGroup: 0
+          envFrom:
+            - configMapRef: 
+                name: {{ .Release.Name }}-config
+            - secretRef: 
+                name: {{ .Release.Name }}-secret
+          ports:
+            - name: http
+              containerPort: 8000
+              protocol: TCP
+          volumeMounts:
+            - name: sqlite-pv
+              mountPath: /app/db
+      volumes:
+        - name: sqlite-pv
+          persistentVolumeClaim:
+            claimName: {{ .Release.Name }}-sqlite-pvc
+---
