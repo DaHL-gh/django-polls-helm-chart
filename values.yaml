@@ -1,24 +1,25 @@
 replicaCount: 5
 
-image:
+image: # изображение для контейнера из deployment
   repository: dahl8dh/django-polls
   tag: latest
   pullPolicy: Always
 
 service:
-  hosts:
+  hosts: # список хостов по которым можно обращаться к django
     - django-polls.local
     - localhost
 
 database:
-  usePostgres: false
+  usePostgres: false # использовать ли постгрес
+  # если постгрес не используется то включается sqlite
 
   postgresSettings:
-    port: 5432
+    port: 5432 # дефолтный порт
     username: dahl
     password: "12345678"
 
-postgresdb:
+postgresdb: # настройки постгреса
   enabled: false
 
   primary:
@@ -31,6 +32,6 @@ postgresdb:
     username: dahl
     password: "12345678"
 
-  persistence:
+  persistence: # настройки pv для постгреса
     enabled: true
     size: 5Gi
