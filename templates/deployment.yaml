@@ -29,6 +29,7 @@ spec:
             - name: http
               containerPort: 8000
               protocol: TCP
+      {{- if not .Values.database.usePostgres }}
           volumeMounts:
             - name: sqlite-pv
               mountPath: /app/db
@@ -36,4 +37,5 @@ spec:
         - name: sqlite-pv
           persistentVolumeClaim:
             claimName: {{ .Release.Name }}-sqlite-pvc
+      {{- end}}
 ---
